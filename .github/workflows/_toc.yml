@@ -1,0 +1,8 @@
+format: jb-book
+root: README
+chapters:
+- file: slurm_demo_v1.ipynb
+- file: slurm_error_v1.ipynb
+- file: slurm_with_flux_v1.ipynb
+- file: slurm_with_lammps_v1.ipynb
+- file: slurm_with_nested_executor.ipynb
