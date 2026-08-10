@@ -63,7 +63,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="executorlib with SLURM" href="slurm_demo_v1.html" />
+    <link rel="next" title="Getting Started" href="slurm_demo_v1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -164,11 +164,11 @@
             </li>
         </ul>
         <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">executorlib with SLURM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_error_v1.html">executorlib with SLURM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">executorlib with SLURM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">executorlib with SLURM and LAMMPS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">executorlib with SLURM: Nested Executors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_error_v1.html">Submission Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">SLURM with Flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">SLURM with LAMMPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">Nested SLURM Jobs</a></li>
 </ul>
 
     </div>
@@ -291,7 +291,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -307,6 +309,14 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -318,7 +328,17 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="executorlib-with-slurm">
 <h1>executorlib with SLURM<a class="headerlink" href="#executorlib-with-slurm" title="Link to this heading">#</a></h1>
-<p>A number of example for applying <a class="reference external" href="https://executorlib.readthedocs.io/">executorlib</a> on <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">CMTI</a>.</p>
+<p>A number of examples for applying <a class="reference external" href="https://executorlib.readthedocs.io/">executorlib</a> on <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">CMTI</a>.</p>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pyiron-dev.github.io/executorlib-with-slurm/slurm_demo_v1.html">Getting Started</a> - submit a serial function, an MPI-parallel function, and nested executors via SLURM</p></li>
+<li><p><a class="reference external" href="https://pyiron-dev.github.io/executorlib-with-slurm/slurm_error_v1.html">Submission Errors</a> - inspect <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> submission failures raised through a <code class="docutils literal notranslate"><span class="pre">Future</span></code></p></li>
+<li><p><a class="reference external" href="https://pyiron-dev.github.io/executorlib-with-slurm/slurm_with_flux_v1.html">SLURM with Flux</a> - run a nested <a class="reference external" href="https://flux-framework.org">Flux</a> instance inside a SLURM allocation</p></li>
+<li><p><a class="reference external" href="https://pyiron-dev.github.io/executorlib-with-slurm/slurm_with_lammps_v1.html">SLURM with LAMMPS</a> - couple executorlib with <a class="reference external" href="https://pylammpsmpi.readthedocs.io">pylammpsmpi</a> for interactive MPI-parallel LAMMPS</p></li>
+<li><p><a class="reference external" href="https://pyiron-dev.github.io/executorlib-with-slurm/slurm_with_nested_executor.html">Nested SLURM Jobs</a> - fan out many short tasks as job steps inside one SLURM allocation</p></li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -358,7 +378,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">executorlib with SLURM</p>
+        <p class="prev-next-title">Getting Started</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -368,6 +388,23 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

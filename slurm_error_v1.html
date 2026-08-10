@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>executorlib with SLURM &#8212; executorlib with SLURM</title>
+    <title>Submission Errors &#8212; executorlib with SLURM</title>
   
   
   
@@ -63,8 +63,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'slurm_error_v1';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="executorlib with SLURM" href="slurm_with_flux_v1.html" />
-    <link rel="prev" title="executorlib with SLURM" href="slurm_demo_v1.html" />
+    <link rel="next" title="SLURM with Flux" href="slurm_with_flux_v1.html" />
+    <link rel="prev" title="Getting Started" href="slurm_demo_v1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -163,11 +163,11 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">executorlib with SLURM</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">executorlib with SLURM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">executorlib with SLURM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">executorlib with SLURM and LAMMPS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">executorlib with SLURM: Nested Executors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">Getting Started</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Submission Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">SLURM with Flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">SLURM with LAMMPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">Nested SLURM Jobs</a></li>
 </ul>
 
     </div>
@@ -334,7 +334,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>executorlib with SLURM</h1>
+    <h1>Submission Errors</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -357,8 +357,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="executorlib-with-slurm">
-<h1>executorlib with SLURM<a class="headerlink" href="#executorlib-with-slurm" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="submission-errors">
+<h1>Submission Errors<a class="headerlink" href="#submission-errors" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://executorlib.readthedocs.io">executorlib</a> extends the <code class="docutils literal notranslate"><span class="pre">Executor</span></code> interface from the Python standard library’s <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html"><code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> to distribute Python functions as jobs on an HPC cluster. This notebook deliberately submits a job with an incomplete <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code> to show how <code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code> surfaces <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> submission failures through the returned <code class="docutils literal notranslate"><span class="pre">Future</span></code>. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/trouble_shooting.html#resource-dictionary">resource dictionary troubleshooting page</a> for the required keys.</p>
 <p>Based on the <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">cmti and cmmg clusters</a> hosted at the MPCDF for the MPI for Sustainable Materials.</p>
 <div class="cell docutils container">
@@ -532,7 +532,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">executorlib with SLURM</p>
+        <p class="prev-next-title">Getting Started</p>
       </div>
     </a>
     <a class="right-next"
@@ -540,7 +540,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">executorlib with SLURM</p>
+        <p class="prev-next-title">SLURM with Flux</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
