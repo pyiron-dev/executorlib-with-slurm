@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>executorlib with SLURM: Nested Executors &#8212; executorlib with SLURM</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slurm_with_nested_executor';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="executorlib with SLURM and LAMMPS" href="slurm_with_lammps_v1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">executorlib with SLURM</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    executorlib with SLURM
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_error_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">executorlib with SLURM and LAMMPS</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">executorlib with SLURM: Nested Executors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-dev/executorlib-with-slurm/master?urlpath=lab/tree/slurm_with_nested_executor.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/slurm_with_nested_executor.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>executorlib with SLURM: Nested Executors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="executorlib-with-slurm-nested-executors">
+<h1>executorlib with SLURM: Nested Executors<a class="headerlink" href="#executorlib-with-slurm-nested-executors" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://executorlib.readthedocs.io">executorlib</a> extends the <code class="docutils literal notranslate"><span class="pre">Executor</span></code> interface from the Python standard library’s <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html"><code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> to distribute Python functions as jobs on an HPC cluster. This notebook submits a single outer SLURM job via <code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code>, which itself opens a second, nested <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code> to fan out many short-lived tasks as job steps within that same allocation. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/3-hpc-job.html">HPC Job Executor documentation</a> for details on nesting executors.</p>
+<p>Based on the <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">cmti and cmmg clusters</a> hosted at the MPCDF for the MPI for Sustainable Materials.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">executorlib</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_with_sleep</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span> <span class="o">+</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">add_with_sleep</span></code> is a toy workload: it sleeps for 5 seconds to simulate a short unit of computation, then returns <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">+</span> <span class="pre">i</span></code>. Its purpose is to demonstrate scheduling overhead, not to compute anything meaningful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nested_executor</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rangemax</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmJobExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+        <span class="n">future_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rangemax</span><span class="p">):</span>
+            <span class="n">future_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">add_with_sleep</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">future_lst</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">nested_executor</span></code> runs <strong>inside</strong> the outer SLURM job and itself creates a <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/3-hpc-job.html#slurm"><code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code></a>, which dispatches tasks as <code class="docutils literal notranslate"><span class="pre">srun</span></code> job steps within the already-running allocation instead of submitting new <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> jobs. With <code class="docutils literal notranslate"><span class="pre">max_workers=10</span></code>, up to ten <code class="docutils literal notranslate"><span class="pre">add_with_sleep</span></code> calls run concurrently, cycling through all <code class="docutils literal notranslate"><span class="pre">rangemax</span></code> inputs before the results are collected.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">submission_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">#!/bin/bash</span>
+<span class="s2">#SBATCH --output=time.out</span>
+<span class="s2">#SBATCH --job-name={{job_name}}</span>
+<span class="s2">#SBATCH --chdir={{working_directory}}</span>
+<span class="s2">#SBATCH --get-user-env</span>
+<span class="s2">#SBATCH --partition={{partition}}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f run_time_max %}</span>
+<span class="s2">#SBATCH --time={{ [1, run_time_max // 60]|max }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f dependency %}</span>
+<span class="s2">#SBATCH --dependency=afterok:{{ dependency | join(&#39;,&#39;) }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f memory_max %}</span>
+<span class="s2">#SBATCH --mem={{memory_max}}G</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">#SBATCH --ntasks={{cores}}</span>
+
+<span class="s2">{{command}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is the standard Jinja2 <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> submission template for the outer job. <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--ntasks={{cores}}</span></code> maps executorlib’s <code class="docutils literal notranslate"><span class="pre">cores</span></code> resource onto the number of SLURM tasks requested; <code class="docutils literal notranslate"><span class="pre">--mem</span></code>, <code class="docutils literal notranslate"><span class="pre">--time</span></code>, and <code class="docutils literal notranslate"><span class="pre">--dependency</span></code> are only emitted when those keys are present in <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmClusterExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">nested_executor</span><span class="p">,</span>
+        <span class="n">workers</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">rangemax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;submission_template&quot;</span><span class="p">:</span> <span class="n">submission_template</span><span class="p">,</span> 
+            <span class="s2">&quot;run_time_max&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>  <span class="c1"># in seconds  </span>
+            <span class="c1"># &quot;partition&quot;: &quot;s.cmfe&quot;,</span>
+            <span class="s2">&quot;partition&quot;</span><span class="p">:</span> <span class="s2">&quot;s.cmmg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/cmmc/ptmp/janj/mambaforge/envs/research/lib/python3.12/site-packages/executorlib/task_scheduler/base.py:156: UserWarning: The following keys are not recognized and cannot be validated: [&#39;partition&#39;]
+  self._validator(resource_dict=resource_dict)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142, 144, 146, 148, 150, 152, 154, 156, 158, 160, 162, 164, 166, 168, 170, 172, 174, 176, 178, 180, 182, 184, 186, 188, 190, 192, 194, 196, 198, 200, 202, 204, 206, 208, 210, 212, 214, 216, 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 238, 240, 242, 244, 246, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282, 284, 286, 288, 290, 292, 294, 296, 298, 300, 302, 304, 306, 308, 310, 312, 314, 316, 318, 320, 322, 324, 326, 328, 330, 332, 334, 336, 338, 340, 342, 344, 346, 348, 350, 352, 354, 356, 358, 360, 362, 364, 366, 368, 370, 372, 374, 376, 378, 380, 382, 384, 386, 388, 390, 392, 394, 396, 398]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The outer job is submitted with <code class="docutils literal notranslate"><span class="pre">cores=1,</span> <span class="pre">threads_per_core=10</span></code>, giving the allocation 10 CPU threads — enough for the nested <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code>’s <code class="docutils literal notranslate"><span class="pre">max_workers=10</span></code> to each run one <code class="docutils literal notranslate"><span class="pre">add_with_sleep</span></code> step concurrently. <code class="docutils literal notranslate"><span class="pre">nested_executor</span></code> is called with <code class="docutils literal notranslate"><span class="pre">workers=10,</span> <span class="pre">rangemax=200</span></code>, so all 200 doubled values are returned as a single list once the outer job’s <code class="docutils literal notranslate"><span class="pre">Future</span></code> resolves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">executorlib</span><span class="o">.</span><span class="n">get_cache_data</span><span class="p">(</span><span class="s2">&quot;executorlib_cache&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;function&#39;: &lt;function __main__.nested_executor(workers=10, rangemax=200)&gt;,
+  &#39;input_args&#39;: [],
+  &#39;input_kwargs&#39;: {&#39;workers&#39;: 10, &#39;rangemax&#39;: 200},
+  &#39;output&#39;: [0,
+   2,
+   4,
+   6,
+   8,
+   10,
+   12,
+   14,
+   16,
+   18,
+   20,
+   22,
+   24,
+   26,
+   28,
+   30,
+   32,
+   34,
+   36,
+   38,
+   40,
+   42,
+   44,
+   46,
+   48,
+   50,
+   52,
+   54,
+   56,
+   58,
+   60,
+   62,
+   64,
+   66,
+   68,
+   70,
+   72,
+   74,
+   76,
+   78,
+   80,
+   82,
+   84,
+   86,
+   88,
+   90,
+   92,
+   94,
+   96,
+   98,
+   100,
+   102,
+   104,
+   106,
+   108,
+   110,
+   112,
+   114,
+   116,
+   118,
+   120,
+   122,
+   124,
+   126,
+   128,
+   130,
+   132,
+   134,
+   136,
+   138,
+   140,
+   142,
+   144,
+   146,
+   148,
+   150,
+   152,
+   154,
+   156,
+   158,
+   160,
+   162,
+   164,
+   166,
+   168,
+   170,
+   172,
+   174,
+   176,
+   178,
+   180,
+   182,
+   184,
+   186,
+   188,
+   190,
+   192,
+   194,
+   196,
+   198,
+   200,
+   202,
+   204,
+   206,
+   208,
+   210,
+   212,
+   214,
+   216,
+   218,
+   220,
+   222,
+   224,
+   226,
+   228,
+   230,
+   232,
+   234,
+   236,
+   238,
+   240,
+   242,
+   244,
+   246,
+   248,
+   250,
+   252,
+   254,
+   256,
+   258,
+   260,
+   262,
+   264,
+   266,
+   268,
+   270,
+   272,
+   274,
+   276,
+   278,
+   280,
+   282,
+   284,
+   286,
+   288,
+   290,
+   292,
+   294,
+   296,
+   298,
+   300,
+   302,
+   304,
+   306,
+   308,
+   310,
+   312,
+   314,
+   316,
+   318,
+   320,
+   322,
+   324,
+   326,
+   328,
+   330,
+   332,
+   334,
+   336,
+   338,
+   340,
+   342,
+   344,
+   346,
+   348,
+   350,
+   352,
+   354,
+   356,
+   358,
+   360,
+   362,
+   364,
+   366,
+   368,
+   370,
+   372,
+   374,
+   376,
+   378,
+   380,
+   382,
+   384,
+   386,
+   388,
+   390,
+   392,
+   394,
+   396,
+   398],
+  &#39;resource_dict&#39;: {&#39;submission_template&#39;: &quot;#!/bin/bash\n#SBATCH --output=time.out\n#SBATCH --job-name={{job_name}}\n#SBATCH --chdir={{working_directory}}\n#SBATCH --get-user-env\n#SBATCH --partition={{partition}}\n{%- if run_time_max %}\n#SBATCH --time={{ [1, run_time_max // 60]|max }}\n{%- endif %}\n{%- if dependency %}\n#SBATCH --dependency=afterok:{{ dependency | join(&#39;,&#39;) }}\n{%- endif %}\n{%- if memory_max %}\n#SBATCH --mem={{memory_max}}G\n{%- endif %}\n#SBATCH --ntasks={{cores}}\n\n{{command}}\n&quot;,
+   &#39;run_time_max&#39;: 180,
+   &#39;partition&#39;: &#39;s.cmmg&#39;,
+   &#39;cores&#39;: 1,
+   &#39;threads_per_core&#39;: 10,
+   &#39;gpus_per_core&#39;: 0,
+   &#39;cwd&#39;: None,
+   &#39;openmpi_oversubscribe&#39;: False,
+   &#39;slurm_cmd_args&#39;: [],
+   &#39;exclusive&#39;: False},
+  &#39;runtime&#39;: 116.25651049613953,
+  &#39;queue_id&#39;: 21567759,
+  &#39;error_log_file&#39;: None,
+  &#39;filename&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-07-28-executor-slurm/executorlib_cache/nested_executor676922b03c3d8501e29cf9abd928f8c6_o.h5&#39;}]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_cache_data</span></code> reads the on-disk cache executorlib writes for submitted functions. Only the outer <code class="docutils literal notranslate"><span class="pre">nested_executor</span></code> call appears here, together with its <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code>, wall-clock <code class="docutils literal notranslate"><span class="pre">runtime</span></code>, and SLURM <code class="docutils literal notranslate"><span class="pre">queue_id</span></code> — the 200 inner <code class="docutils literal notranslate"><span class="pre">add_with_sleep</span></code> steps run inside the same allocation via <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code> and are not tracked as separate cache entries. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/installation.html#caching">caching section of the installation guide</a> for more on how the cache is configured.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="slurm_with_lammps_v1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">executorlib with SLURM and LAMMPS</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

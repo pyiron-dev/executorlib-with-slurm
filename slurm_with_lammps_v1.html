@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>executorlib with SLURM and LAMMPS &#8212; executorlib with SLURM</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slurm_with_lammps_v1';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="executorlib with SLURM: Nested Executors" href="slurm_with_nested_executor.html" />
+    <link rel="prev" title="executorlib with SLURM" href="slurm_with_flux_v1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">executorlib with SLURM</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    executorlib with SLURM
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="slurm_demo_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_error_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">executorlib with SLURM and LAMMPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">executorlib with SLURM: Nested Executors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-dev/executorlib-with-slurm/master?urlpath=lab/tree/slurm_with_lammps_v1.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/slurm_with_lammps_v1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>executorlib with SLURM and LAMMPS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="executorlib-with-slurm-and-lammps">
+<h1>executorlib with SLURM and LAMMPS<a class="headerlink" href="#executorlib-with-slurm-and-lammps" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://executorlib.readthedocs.io">executorlib</a> extends the <code class="docutils literal notranslate"><span class="pre">Executor</span></code> interface from the Python standard library’s <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html"><code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> to distribute Python functions as jobs on an HPC cluster. This notebook couples executorlib with <a class="reference external" href="https://pylammpsmpi.readthedocs.io">pylammpsmpi</a> to run an interactive, MPI-parallel <a class="reference external" href="https://www.lammps.org">LAMMPS</a> molecular dynamics simulation inside a single persistent SLURM allocation. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/coupling.html#pylammpsmpi">pylammpsmpi integration guide</a> for background.</p>
+<p>Based on the <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">cmti and cmmg clusters</a> hosted at the MPCDF for the MPI for Sustainable Materials.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">executorlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">SlurmClusterExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lammpsparser</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_potential_dataframe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pylammpsmpi</span><span class="w"> </span><span class="kn">import</span> <span class="n">LammpsASELibrary</span><span class="p">,</span> <span class="n">init_function</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The imports combine <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">ASE</a> for building the atomic structure, executorlib’s <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/2-hpc-cluster.html#slurm"><code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code></a> for submitting the SLURM job, <a class="reference external" href="https://jinja.palletsprojects.com">Jinja2</a> for templating LAMMPS input commands, <code class="docutils literal notranslate"><span class="pre">lammpsparser</span></code> for looking up interatomic potentials, and <code class="docutils literal notranslate"><span class="pre">pylammpsmpi</span></code>’s <code class="docutils literal notranslate"><span class="pre">LammpsASELibrary</span></code> together with <code class="docutils literal notranslate"><span class="pre">init_function</span></code> for driving an MPI-parallel LAMMPS instance interactively from Python.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">structure</span> <span class="o">=</span> <span class="n">bulk</span><span class="p">(</span><span class="s2">&quot;Au&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">element_lst</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()</span>
+<span class="n">element_lst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Cu&quot;</span>
+<span class="n">structure</span><span class="o">.</span><span class="n">set_chemical_symbols</span><span class="p">(</span><span class="n">element_lst</span><span class="p">)</span>
+<span class="n">structure</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Atoms(symbols=&#39;Au3999Cu&#39;, pbc=True, cell=[40.8, 40.8, 40.8])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using ASE, a bulk gold (Au) FCC unit cell is built and repeated 10×10×10 to create a 4000-atom supercell. One atom is then substituted with copper (Cu) to introduce a single substitutional defect, giving an Au₃₉₉₉Cu structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_pot</span> <span class="o">=</span> <span class="n">get_potential_dataframe</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+<span class="n">df_pot</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Config</th>
+      <th>Filename</th>
+      <th>Model</th>
+      <th>Name</th>
+      <th>Species</th>
+      <th>Citations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>[pair_style eam, pair_coeff 1 1 /cmmc/ptmp/pyi...</td>
+      <td>[potential_LAMMPS/1986--Foiles-S-M--Ag-Au-Cu-N...</td>
+      <td>NISTiprpy</td>
+      <td>1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>[{'Foiles_1986': {'title': 'Embedded-atom-meth...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>[pair_style eam, pair_coeff 1 1 /cmmc/ptmp/pyi...</td>
+      <td>[potential_LAMMPS/1989--Adams-J-B--Ag-Au-Cu-Ni...</td>
+      <td>NISTiprpy</td>
+      <td>1989--Adams-J-B--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>[{'Adams_1989': {'title': 'Self-diffusion and ...</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>[pair_style eam/fs, pair_coeff * * /cmmc/ptmp/...</td>
+      <td>[potential_LAMMPS/1990--Ackland-G-J--Cu-Ag-Au-...</td>
+      <td>NISTiprpy</td>
+      <td>1990--Ackland-G-J--Cu-Ag-Au--LAMMPS--ipr1</td>
+      <td>[Cu, Ag, Au]</td>
+      <td>[{'Ackland_1990': {'title': 'Many-body potenti...</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>[pair_style eam/alloy, pair_coeff * * /cmmc/pt...</td>
+      <td>[potential_LAMMPS/2004--Zhou-X-W--Cu-Ag-Au--LA...</td>
+      <td>NISTiprpy</td>
+      <td>2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr2</td>
+      <td>[Cu, Ag, Au]</td>
+      <td>[{'Zhou_2004': {'title': 'Misfit-energy-increa...</td>
+    </tr>
+    <tr>
+      <th>513</th>
+      <td>[/cmmc/ptmp/pyironhb/mambaforge/envs//pyiron_m...</td>
+      <td>[]</td>
+      <td>OPENKIM</td>
+      <td>EAM_Dynamo_GolaPastewka_2018_CuAu__MO_42640331...</td>
+      <td>[Cu, Au]</td>
+      <td>[{'Adrien_2018': {'title': 'Embedded atom meth...</td>
+    </tr>
+    <tr>
+      <th>594</th>
+      <td>[/cmmc/ptmp/pyironhb/mambaforge/envs//pyiron_m...</td>
+      <td>[]</td>
+      <td>OPENKIM</td>
+      <td>EAM_Dynamo_ZhouJohnsonWadley_2004NISTretabulat...</td>
+      <td>[Cu, Ag, Au]</td>
+      <td>[{'W._2004': {'title': 'Misfit-energy-increasi...</td>
+    </tr>
+    <tr>
+      <th>654</th>
+      <td>[/cmmc/ptmp/pyironhb/mambaforge/envs//pyiron_m...</td>
+      <td>[]</td>
+      <td>OPENKIM</td>
+      <td>EMT_Asap_Standard_JacobsenStoltzeNorskov_1996_...</td>
+      <td>[Al, Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>[{'Jacobsen_1996': {'title': 'A semi-empirical...</td>
+    </tr>
+    <tr>
+      <th>905</th>
+      <td>[/cmmc/ptmp/pyironhb/mambaforge/envs//pyiron_m...</td>
+      <td>[]</td>
+      <td>OPENKIM</td>
+      <td>Sim_ASAP_EMT_Rasmussen_AgAuCu__SM_847706399649...</td>
+      <td>[Ag, Au, Cu]</td>
+      <td>[{'Jacobsen_1996': {'title': 'A semi-empirical...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_potential_dataframe</span></code> queries the NIST and OpenKIM interatomic potential databases for LAMMPS potentials compatible with the elements present in <code class="docutils literal notranslate"><span class="pre">structure</span></code> (Au and Cu), returning their <code class="docutils literal notranslate"><span class="pre">pair_style</span></code>/<code class="docutils literal notranslate"><span class="pre">pair_coeff</span></code> configuration alongside metadata such as the model name and citation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">potential</span> <span class="o">=</span> <span class="s2">&quot;1990--Ackland-G-J--Cu-Ag-Au--LAMMPS--ipr1&quot;</span>
+<span class="n">df_pot</span><span class="p">[</span><span class="n">df_pot</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">potential</span><span class="p">][</span><span class="s2">&quot;Species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_pot</span><span class="p">[</span><span class="n">df_pot</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">potential</span><span class="p">][</span><span class="s2">&quot;Config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([&#39;Cu&#39;, &#39;Ag&#39;, &#39;Au&#39;],
+ [&#39;pair_style eam/fs&#39;,
+  &#39;pair_coeff * * /cmmc/ptmp/pyironhb/mambaforge/envs//pyiron_mpie_cmti_2026-06-17/share/iprpy/potential_LAMMPS/1990--Ackland-G-J--Cu-Ag-Au--LAMMPS--ipr1/CuAgAu.eam.fs Cu Ag Au&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>A specific EAM potential is selected from the results, and its <code class="docutils literal notranslate"><span class="pre">Config</span></code> entry is extracted — these are the raw LAMMPS <code class="docutils literal notranslate"><span class="pre">pair_style</span></code>/<code class="docutils literal notranslate"><span class="pre">pair_coeff</span></code> commands that will be issued to the interactive LAMMPS session below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LAMMPS_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">thermo {{thermo}}</span>
+<span class="s2">thermo_style custom step temp pe etotal pxx pxy pxz pyy pyz pzz vol</span>
+<span class="s2">thermo_modify format float </span><span class="si">%20.15g</span>
+<span class="s2">timestep {{timestep}}</span>
+<span class="s2">velocity all create $({{velocity_rescale_factor}} * {{ temp }}) {{seed}} dist {{dist}}</span>
+<span class="s2">fix ensemble all nvt temp {{Tstart}} {{Tstop}} {{Tdamp}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">LAMMPS_template</span></code> is a Jinja2 template for the remaining LAMMPS input commands: thermo output frequency and formatting, the MD timestep, initial velocities drawn from a Gaussian distribution at the target temperature, and an NVT thermostat (<code class="docutils literal notranslate"><span class="pre">fix</span> <span class="pre">ensemble</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">LAMMPS_template</span><span class="p">)</span>
+<span class="n">lmp_str</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+    <span class="n">thermo</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">timestep</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">velocity_rescale_factor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">temp</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span>
+    <span class="n">dist</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+    <span class="n">Tstart</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
+    <span class="n">Tstop</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
+    <span class="n">Tdamp</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">lmp_str</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;thermo 100\nthermo_style custom step temp pe etotal pxx pxy pxz pyy pyz pzz vol\nthermo_modify format float %20.15g\ntimestep 0.001\nvelocity all create $(2.0 * 300.0) 12345 dist gaussian\nfix ensemble all nvt temp 300.0 300.0 0.1&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Rendering the template with concrete values (100-step thermo output, 1 fs timestep, 300 K target temperature, NVT damping of 0.1) produces <code class="docutils literal notranslate"><span class="pre">lmp_str</span></code>, the literal block of LAMMPS commands that will be sent to the interactive session one line at a time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">submission_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">#!/bin/bash</span>
+<span class="s2">#SBATCH --output=time.out</span>
+<span class="s2">#SBATCH --job-name={{job_name}}</span>
+<span class="s2">#SBATCH --chdir={{working_directory}}</span>
+<span class="s2">#SBATCH --get-user-env=L</span>
+<span class="s2">#SBATCH --partition={{partition}}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f run_time_max %}</span>
+<span class="s2">#SBATCH --time={{ [1, run_time_max // 60]|max }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f dependency %}</span>
+<span class="s2">#SBATCH --dependency=afterok:{{ dependency | join(&#39;,&#39;) }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f memory_max %}</span>
+<span class="s2">#SBATCH --mem={{memory_max}}G</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">#SBATCH --ntasks={{cores}}</span>
+
+<span class="s2">{{command}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is the same Jinja2 <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> submission template used for plain SLURM submission: <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--ntasks={{cores}}</span></code> maps executorlib’s <code class="docutils literal notranslate"><span class="pre">cores</span></code> resource directly onto the number of SLURM tasks (MPI ranks) requested for the job.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code> is created with <code class="docutils literal notranslate"><span class="pre">block_allocation=True</span></code>, which keeps a persistent pool of worker processes alive in a single SLURM allocation instead of submitting a new job per task, and <code class="docutils literal notranslate"><span class="pre">init_function=init_function</span></code>, which runs once per worker to set up the MPI communicator that <code class="docutils literal notranslate"><span class="pre">pylammpsmpi</span></code> needs. <code class="docutils literal notranslate"><span class="pre">pmi_mode=&quot;pmix&quot;</span></code> launches the workers via <code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--mpi=pmix</span></code> across the requested <code class="docutils literal notranslate"><span class="pre">cores=80</span></code>. <code class="docutils literal notranslate"><span class="pre">LammpsASELibrary(executor=exe,</span> <span class="pre">cores=80)</span></code> then uses executorlib as the parallel backend for <code class="docutils literal notranslate"><span class="pre">pylammpsmpi</span></code>, so every <code class="docutils literal notranslate"><span class="pre">interactive_*</span></code> call below is dispatched as an MPI-parallel LAMMPS command inside that persistent allocation rather than spawning a new job. The structure, potential, and thermostat settings assembled above are applied interactively, 100 MD steps are run, and the resulting potential energy is printed before the session is closed. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/api.html"><code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code> API reference</a> for the full set of executor options.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SlurmClusterExecutor</span><span class="p">(</span> 
+    <span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+    <span class="n">block_allocation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;submission_template&quot;</span><span class="p">:</span> <span class="n">submission_template</span><span class="p">,</span> 
+        <span class="c1"># &quot;run_time_max&quot;: 180,  # in seconds  </span>
+        <span class="s2">&quot;partition&quot;</span><span class="p">:</span> <span class="s2">&quot;p.cmfe&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+        <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">init_function</span><span class="o">=</span><span class="n">init_function</span><span class="p">,</span>
+    <span class="n">pmi_mode</span><span class="o">=</span><span class="s2">&quot;pmix&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+    <span class="n">lmp</span> <span class="o">=</span> <span class="n">LammpsASELibrary</span><span class="p">(</span><span class="n">executor</span><span class="o">=</span><span class="n">exe</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+    <span class="n">lmp</span><span class="o">.</span><span class="n">interactive_structure_setter</span><span class="p">(</span>
+        <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;metal&quot;</span><span class="p">,</span>
+        <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;p&quot;</span> <span class="k">if</span> <span class="n">coord</span> <span class="k">else</span> <span class="s2">&quot;f&quot;</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">structure</span><span class="o">.</span><span class="n">pbc</span><span class="p">]),</span>
+        <span class="n">atom_style</span><span class="o">=</span><span class="s2">&quot;atomic&quot;</span><span class="p">,</span>
+        <span class="n">el_eam_lst</span><span class="o">=</span><span class="n">df_pot</span><span class="p">[</span><span class="n">df_pot</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">potential</span><span class="p">][</span><span class="s2">&quot;Species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">calc_md</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df_pot</span><span class="p">[</span><span class="n">df_pot</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">potential</span><span class="p">][</span><span class="s2">&quot;Config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">lmp</span><span class="o">.</span><span class="n">interactive_lib_command</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lmp_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lmp_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">lmp</span><span class="o">.</span><span class="n">interactive_lib_command</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="n">lmp</span><span class="o">.</span><span class="n">interactive_lib_command</span><span class="p">(</span><span class="s2">&quot;run 100&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">lmp</span><span class="o">.</span><span class="n">interactive_energy_pot_getter</span><span class="p">())</span>
+    <span class="n">lmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/cmmc/ptmp/pyironhb/mambaforge/envs/pyiron_mpie_cmti_2026-06-17/lib/python3.12/site-packages/executorlib/executor/slurm.py:192: UserWarning: The following keys are not recognized and cannot be validated: [&#39;partition&#39;]
+  validate_resource_dict_with_optional_keys(resource_dict=resource_dict)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-14956.417260034283
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="slurm_with_flux_v1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">executorlib with SLURM</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="slurm_with_nested_executor.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">executorlib with SLURM: Nested Executors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

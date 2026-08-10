@@ -1,0 +1,980 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>executorlib with SLURM &#8212; executorlib with SLURM</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slurm_demo_v1';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="executorlib with SLURM" href="slurm_error_v1.html" />
+    <link rel="prev" title="executorlib with SLURM" href="README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">executorlib with SLURM</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    executorlib with SLURM
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_error_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_flux_v1.html">executorlib with SLURM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_lammps_v1.html">executorlib with SLURM and LAMMPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurm_with_nested_executor.html">executorlib with SLURM: Nested Executors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-dev/executorlib-with-slurm/master?urlpath=lab/tree/slurm_demo_v1.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/slurm_demo_v1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>executorlib with SLURM</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submit-python-function-to-slurm">Submit Python Function to SLURM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submit-mpi-parallel-python-function-to-slurm">Submit MPI parallel Python function to SLURM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-executors">Nested Executors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clean-up">Clean up</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="executorlib-with-slurm">
+<h1>executorlib with SLURM<a class="headerlink" href="#executorlib-with-slurm" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://executorlib.readthedocs.io">executorlib</a> extends the <code class="docutils literal notranslate"><span class="pre">Executor</span></code> interface from the Python standard library’s <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html"><code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> to distribute Python functions as jobs on an HPC cluster, without having to rewrite the functions themselves. This notebook walks through submitting a serial function, an MPI-parallel function, and nested executors via SLURM.</p>
+<p>Based on the <a class="reference external" href="https://docs.mpcdf.mpg.de/doc/computing/clusters/systems/Sustainable_Materials.html">cmti and cmmg clusters</a> hosted at the MPCDF for the MPI for Sustainable Materials.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">executorlib</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>executorlib wraps Python functions as SLURM jobs. <code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code> submits each function call as a separate <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> job, while <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code> (used later for nested tasks) runs steps inside an already-running job allocation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">executorlib</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.0.1&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">executorlib</span><span class="o">.</span><span class="n">__path__</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/u/janj/projects/executorlib/src/executorlib&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="submit-python-function-to-slurm">
+<h2>Submit Python Function to SLURM<a class="headerlink" href="#submit-python-function-to-slurm" title="Link to this heading">#</a></h2>
+<p>This is just like using <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> to submit shell scripts. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/2-hpc-cluster.html#slurm"><code class="docutils literal notranslate"><span class="pre">SlurmClusterExecutor</span></code> documentation</a> for the full set of options.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_slurm_env</span><span class="p">():</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;SLURM_&quot;</span> <span class="ow">in</span> <span class="n">k</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_slurm_env</span></code> is the function that will be sent to the cluster. It collects all <code class="docutils literal notranslate"><span class="pre">SLURM_*</span></code> environment variables from inside the running job, so we can verify which resources SLURM actually assigned. The <code class="docutils literal notranslate"><span class="pre">sleep(5)</span></code> gives the job a moment to settle before sampling the environment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">submission_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">#!/bin/bash</span>
+<span class="s2">#SBATCH --output=time.out</span>
+<span class="s2">#SBATCH --job-name={{job_name}}</span>
+<span class="s2">#SBATCH --chdir={{working_directory}}</span>
+<span class="s2">#SBATCH --get-user-env=L</span>
+<span class="s2">#SBATCH --partition={{partition}}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f run_time_max %}</span>
+<span class="s2">#SBATCH --time={{ [1, run_time_max // 60]|max }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f dependency %}</span>
+<span class="s2">#SBATCH --dependency=afterok:{{ dependency | join(&#39;,&#39;) }}</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">{</span><span class="si">%- i</span><span class="s2">f memory_max %}</span>
+<span class="s2">#SBATCH --mem={{memory_max}}G</span>
+<span class="s2">{</span><span class="si">%- e</span><span class="s2">ndif %}</span>
+<span class="s2">#SBATCH --ntasks={{cores}}</span>
+
+<span class="s2">{{command}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The submission template is a Jinja2 template for the <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> script. The line <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--ntasks={{cores}}</span></code> is the key mapping: the <code class="docutils literal notranslate"><span class="pre">cores</span></code> value in executorlib’s <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code> becomes the number of SLURM <strong>tasks</strong> (i.e. processes). For a serial job <code class="docutils literal notranslate"><span class="pre">cores=1</span></code> requests a single process. For an MPI job <code class="docutils literal notranslate"><span class="pre">cores=N</span></code> requests N processes — one per MPI rank. The <code class="docutils literal notranslate"><span class="pre">--mem</span></code>, <code class="docutils literal notranslate"><span class="pre">--time</span></code>, and <code class="docutils literal notranslate"><span class="pre">--dependency</span></code> lines are only emitted when those keys are present in <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmClusterExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">get_slurm_env</span><span class="p">,</span>
+        <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;submission_template&quot;</span><span class="p">:</span> <span class="n">submission_template</span><span class="p">,</span> 
+            <span class="s2">&quot;run_time_max&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>  <span class="c1"># in seconds  </span>
+            <span class="c1"># &quot;partition&quot;: &quot;s.cmfe&quot;,</span>
+            <span class="s2">&quot;partition&quot;</span><span class="p">:</span> <span class="s2">&quot;s.cmmg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/u/janj/projects/executorlib/src/executorlib/task_scheduler/base.py:156: UserWarning: The following keys are not recognized and cannot be validated: [&#39;partition&#39;]
+  self._validator(resource_dict=resource_dict)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;272848&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_slurm_envccfcb90850bb2803c9b37c6ecde017ee&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017883&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017703&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;4&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;8&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332320&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;8&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;4&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332320&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we submit the serial function. <code class="docutils literal notranslate"><span class="pre">cores=1</span></code> requests one process (<code class="docutils literal notranslate"><span class="pre">--ntasks=1</span></code>). <code class="docutils literal notranslate"><span class="pre">threads_per_core=4</span></code> tells executorlib how many CPU threads are available to that process — this maps to <code class="docutils literal notranslate"><span class="pre">--cpus-per-task</span></code> in SLURM terminology. The returned <code class="docutils literal notranslate"><span class="pre">Future</span></code> object <code class="docutils literal notranslate"><span class="pre">f1</span></code> is resolved by calling <code class="docutils literal notranslate"><span class="pre">f1.result()</span></code>, which blocks until the SLURM job completes and returns the function’s return value.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">executorlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cache_data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cache_dir</span> <span class="o">=</span> <span class="s2">&quot;executorlib_cache&quot;</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">get_cache_data</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;get_slurm_env&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])</span>
+        <span class="n">shell_output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;sacct&quot;</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20332320
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_cache_data</span></code> reads the on-disk cache that executorlib writes for every submitted function. The <code class="docutils literal notranslate"><span class="pre">queue_id</span></code> field is the SLURM job ID, which we pass to <code class="docutils literal notranslate"><span class="pre">sacct</span></code> to query the scheduler’s accounting database. <code class="docutils literal notranslate"><span class="pre">sacct</span></code> confirms that the job ran, which partition it used, and how many CPUs were allocated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shell_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;JobID           JobName  Partition    Account  AllocCPUS      State ExitCode &#39;,
+ &#39;------------ ---------- ---------- ---------- ---------- ---------- -------- &#39;,
+ &#39;20332320     executorl+     s.cmmg        mpd          8  COMPLETED      0:0 &#39;,
+ &#39;20332320.ba+      batch                   mpd          8  COMPLETED      0:0 &#39;,
+ &#39;20332320.ex+     extern                   mpd          8  COMPLETED      0:0 &#39;,
+ &#39;&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="submit-mpi-parallel-python-function-to-slurm">
+<h2>Submit MPI parallel Python function to SLURM<a class="headerlink" href="#submit-mpi-parallel-python-function-to-slurm" title="Link to this heading">#</a></h2>
+<p>One of the key features of executorlib is supporting <a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/">mpi4py</a> parallel Python functions. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/installation.html#mpi-support">MPI support section of the installation guide</a> for the required dependencies.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_slurm_parallel_env</span><span class="p">():</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
+
+    <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_size</span><span class="p">()</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
+
+    <span class="n">env_dict</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;SLURM_&quot;</span> <span class="ow">in</span> <span class="n">k</span>
+    <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_slurm_parallel_env</span></code> is an MPI-parallel function. Each MPI rank calls <code class="docutils literal notranslate"><span class="pre">os.environ</span></code> independently, then <code class="docutils literal notranslate"><span class="pre">comm.gather</span></code> collects all per-rank dictionaries onto rank 0, which returns the combined list. Because this function uses <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code>, executorlib must launch it with <code class="docutils literal notranslate"><span class="pre">srun</span></code> rather than a plain Python call — that is why <code class="docutils literal notranslate"><span class="pre">pmi_mode=&quot;pmix&quot;</span></code> is passed to the executor.</p>
+<p>The important part here is the <code class="docutils literal notranslate"><span class="pre">pmi_mode=&quot;pmix&quot;</span></code> to use the right backend:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmClusterExecutor</span><span class="p">(</span><span class="n">pmi_mode</span><span class="o">=</span><span class="s2">&quot;pmix&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">get_slurm_parallel_env</span><span class="p">,</span>
+        <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;submission_template&quot;</span><span class="p">:</span> <span class="n">submission_template</span><span class="p">,</span> 
+            <span class="s2">&quot;run_time_max&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>  <span class="c1"># in seconds  </span>
+            <span class="c1"># &quot;partition&quot;: &quot;s.cmfe&quot;,</span>
+            <span class="s2">&quot;partition&quot;</span><span class="p">:</span> <span class="s2">&quot;s.cmmg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/u/janj/projects/executorlib/src/executorlib/task_scheduler/base.py:156: UserWarning: The following keys are not recognized and cannot be validated: [&#39;partition&#39;]
+  self._validator(resource_dict=resource_dict)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[{&#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;272999&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017894&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017714&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;4&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;32&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332321&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;32&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;4&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0,1,2,3&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332321&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;block&#39;, &#39;SLURM_STEP_ID&#39;: &#39;0&#39;, &#39;SLURM_STEPID&#39;: &#39;0&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;4&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;36151&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;36151&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;36473&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,4))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273000&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;1&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017894&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017714&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;4&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;32&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332321&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;32&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;4&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0,1,2,3&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332321&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;1&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;block&#39;, &#39;SLURM_STEP_ID&#39;: &#39;0&#39;, &#39;SLURM_STEPID&#39;: &#39;0&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;4&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;36151&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;36151&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;36473&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,4))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273001&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;2&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017894&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017714&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;4&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;32&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332321&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;32&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;4&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0,1,2,3&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332321&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;2&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;block&#39;, &#39;SLURM_STEP_ID&#39;: &#39;0&#39;, &#39;SLURM_STEPID&#39;: &#39;0&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;4&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;36151&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;36151&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;36473&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,4))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273002&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;3&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017894&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017714&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;4&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;32&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332321&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;32&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;4&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0,1,2,3&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332321&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;3&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;block&#39;, &#39;SLURM_STEP_ID&#39;: &#39;0&#39;, &#39;SLURM_STEPID&#39;: &#39;0&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;4&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;4&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;36151&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;36151&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;36473&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,4))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001,0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002,0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004,0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}], None, None, None]
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cores=4</span></code> requests four tasks (<code class="docutils literal notranslate"><span class="pre">--ntasks=4</span></code>), one per MPI rank. With <code class="docutils literal notranslate"><span class="pre">pmi_mode=&quot;pmix&quot;</span></code> the executor wraps the function call in <code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--mpi=pmix</span> <span class="pre">-n</span> <span class="pre">4</span></code>, so all four ranks start simultaneously inside the single SLURM job allocation. The <code class="docutils literal notranslate"><span class="pre">sacct</span></code> output will show <code class="docutils literal notranslate"><span class="pre">AllocCPUS</span></code> matching <code class="docutils literal notranslate"><span class="pre">cores</span> <span class="pre">×</span> <span class="pre">threads_per_core</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">get_cache_data</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;get_slurm_parallel_env&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])</span>
+        <span class="n">shell_output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;sacct&quot;</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20332321
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shell_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;JobID           JobName  Partition    Account  AllocCPUS      State ExitCode &#39;,
+ &#39;------------ ---------- ---------- ---------- ---------- ---------- -------- &#39;,
+ &#39;20332321     executorl+     s.cmmg        mpd         32    RUNNING      0:0 &#39;,
+ &#39;20332321.ba+      batch                   mpd         32    RUNNING      0:0 &#39;,
+ &#39;20332321.ex+     extern                   mpd         32    RUNNING      0:0 &#39;,
+ &#39;20332321.0       python                   mpd         32    RUNNING      0:0 &#39;,
+ &#39;&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="nested-executors">
+<h2>Nested Executors<a class="headerlink" href="#nested-executors" title="Link to this heading">#</a></h2>
+<p>Finally, to gain the most of the flexibility executorlib offers the option to nest executors within each other. See the <a class="reference external" href="https://executorlib.readthedocs.io/en/latest/3-hpc-job.html">HPC Job Executor documentation</a> for more details on <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code> and running nested workloads inside an existing allocation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_nested_env</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmJobExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pmi_mode</span><span class="o">=</span><span class="s2">&quot;pmix&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+        <span class="n">future_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">future_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">get_slurm_env</span><span class="p">,</span>
+                <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">future_lst</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_nested_env</span></code> runs <strong>inside</strong> a SLURM job and itself creates a second-level executor. <code class="docutils literal notranslate"><span class="pre">SlurmJobExecutor</span></code> re-uses the existing allocation instead of submitting new <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> jobs: it dispatches each of the four <code class="docutils literal notranslate"><span class="pre">get_slurm_env</span></code> calls as an <code class="docutils literal notranslate"><span class="pre">srun</span></code> step within the parent job. The outer job is allocated <code class="docutils literal notranslate"><span class="pre">cores=1,</span> <span class="pre">threads_per_core=4</span></code> (one task slot with 4 CPUs). Each inner step requests <code class="docutils literal notranslate"><span class="pre">cores=1,</span> <span class="pre">threads_per_core=1</span></code>, so four steps share the available CPUs — this is valid because the outer allocation has enough CPU resources to run them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">executorlib</span><span class="o">.</span><span class="n">SlurmClusterExecutor</span><span class="p">(</span><span class="n">pmi_mode</span><span class="o">=</span><span class="s2">&quot;pmix&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">get_nested_env</span><span class="p">,</span>
+        <span class="n">resource_dict</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;submission_template&quot;</span><span class="p">:</span> <span class="n">submission_template</span><span class="p">,</span> 
+            <span class="s2">&quot;run_time_max&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>  <span class="c1"># in seconds  </span>
+            <span class="c1"># &quot;partition&quot;: &quot;s.cmfe&quot;,</span>
+            <span class="s2">&quot;partition&quot;</span><span class="p">:</span> <span class="s2">&quot;s.cmmg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cores&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;threads_per_core&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="p">})</span>
+
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">get_cache_data</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;get_nested_env&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])</span>
+            <span class="n">shell_output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;sacct&quot;</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/u/janj/projects/executorlib/src/executorlib/task_scheduler/base.py:156: UserWarning: The following keys are not recognized and cannot be validated: [&#39;partition&#39;]
+  self._validator(resource_dict=resource_dict)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20332322
+[{&#39;SLURM_TRES_PER_TASK&#39;: &#39;cpu=1&#39;, &#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273267&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_nested_envfa45bec89a84ca0b105107cb298c9a0d&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017904&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017724&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;1&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;8&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332322&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;2&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;1&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332322&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_CPUS_PER_TASK&#39;: &#39;1&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;cyclic&#39;, &#39;SLURM_STEP_ID&#39;: &#39;0&#39;, &#39;SLURM_STEPID&#39;: &#39;0&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;1&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;37523&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;37523&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;32831&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,1))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_TRES_PER_TASK&#39;: &#39;cpu=1&#39;, &#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273273&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_nested_envfa45bec89a84ca0b105107cb298c9a0d&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017904&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017724&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;1&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;8&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332322&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;2&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;1&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332322&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_CPUS_PER_TASK&#39;: &#39;1&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;cyclic&#39;, &#39;SLURM_STEP_ID&#39;: &#39;3&#39;, &#39;SLURM_STEPID&#39;: &#39;3&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;1&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;37645&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;37645&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;42193&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,1))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000008&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_TRES_PER_TASK&#39;: &#39;cpu=1&#39;, &#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273270&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_nested_envfa45bec89a84ca0b105107cb298c9a0d&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017904&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017724&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;1&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;8&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332322&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;2&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;1&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332322&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_CPUS_PER_TASK&#39;: &#39;1&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;cyclic&#39;, &#39;SLURM_STEP_ID&#39;: &#39;1&#39;, &#39;SLURM_STEPID&#39;: &#39;1&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;1&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;39559&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;39559&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;39135&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,1))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}, {&#39;SLURM_TRES_PER_TASK&#39;: &#39;cpu=1&#39;, &#39;SLURM_MEM_PER_CPU&#39;: &#39;1500&#39;, &#39;SLURM_NODEID&#39;: &#39;0&#39;, &#39;SLURM_TASK_PID&#39;: &#39;273271&#39;, &#39;SLURM_PRIO_PROCESS&#39;: &#39;0&#39;, &#39;SLURM_SUBMIT_DIR&#39;: &#39;/cmmc/u/janj/notebooks/2026/2026-06-03-prabhath-exe/executorlib_cache/get_nested_envfa45bec89a84ca0b105107cb298c9a0d&#39;, &#39;SLURM_CELL&#39;: &#39;CMMC&#39;, &#39;SLURM_PROCID&#39;: &#39;0&#39;, &#39;SLURM_JOB_GID&#39;: &#39;12500&#39;, &#39;SLURM_JOB_END_TIME&#39;: &#39;1781017904&#39;, &#39;SLURM_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_NNODES&#39;: &#39;1&#39;, &#39;SLURM_GET_USER_ENV&#39;: &#39;1&#39;, &#39;SLURM_JOB_START_TIME&#39;: &#39;1781017724&#39;, &#39;SLURM_JOB_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_CLUSTER_NAME&#39;: &#39;cmmc&#39;, &#39;SLURM_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_NTASKS&#39;: &#39;1&#39;, &#39;SLURM_JOB_CPUS_PER_NODE&#39;: &#39;8&#39;, &#39;SLURM_TOPOLOGY_ADDR&#39;: &#39;xxx-xxx-xxx.cmmg001&#39;, &#39;SLURM_JOB_NAME&#39;: &#39;executorlib_cache&#39;, &#39;SLURM_JOBID&#39;: &#39;20332322&#39;, &#39;SLURM_CONF&#39;: &#39;/etc/slurm/slurm.conf&#39;, &#39;SLURM_JOB_QOS&#39;: &#39;normal&#39;, &#39;SLURM_TOPOLOGY_ADDR_PATTERN&#39;: &#39;switch.node&#39;, &#39;SLURM_CPUS_ON_NODE&#39;: &#39;2&#39;, &#39;SLURM_JOB_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_JOB_UID&#39;: &#39;35052&#39;, &#39;SLURM_JOB_PARTITION&#39;: &#39;s.cmmg&#39;, &#39;SLURM_SCRIPT_CONTEXT&#39;: &#39;prolog_task&#39;, &#39;SLURM_JOB_USER&#39;: &#39;janj&#39;, &#39;SLURM_NPROCS&#39;: &#39;1&#39;, &#39;SLURM_SUBMIT_HOST&#39;: &#39;cmti001&#39;, &#39;SLURM_JOB_ACCOUNT&#39;: &#39;mpd&#39;, &#39;SLURM_GTIDS&#39;: &#39;0&#39;, &#39;SLURM_JOB_ID&#39;: &#39;20332322&#39;, &#39;SLURM_OOM_KILL_STEP&#39;: &#39;1&#39;, &#39;SLURM_LOCALID&#39;: &#39;0&#39;, &#39;SLURM_MPI_TYPE&#39;: &#39;pmix&#39;, &#39;SLURM_UMASK&#39;: &#39;0022&#39;, &#39;SLURM_CPUS_PER_TASK&#39;: &#39;1&#39;, &#39;SLURM_DISTRIBUTION&#39;: &#39;cyclic&#39;, &#39;SLURM_STEP_ID&#39;: &#39;2&#39;, &#39;SLURM_STEPID&#39;: &#39;2&#39;, &#39;SLURM_STEP_NODELIST&#39;: &#39;cmmg001&#39;, &#39;SLURM_STEP_NUM_NODES&#39;: &#39;1&#39;, &#39;SLURM_STEP_NUM_TASKS&#39;: &#39;1&#39;, &#39;SLURM_STEP_TASKS_PER_NODE&#39;: &#39;1&#39;, &#39;SLURM_STEP_LAUNCHER_PORT&#39;: &#39;36917&#39;, &#39;SLURM_SRUN_COMM_PORT&#39;: &#39;36917&#39;, &#39;SLURM_PMIXP_ABORT_AGENT_PORT&#39;: &#39;42277&#39;, &#39;SLURM_PMIX_MAPPING_SERV&#39;: &#39;(vector,(0,1,1))&#39;, &#39;SLURM_SRUN_COMM_HOST&#39;: &#39;130.183.186.16&#39;, &#39;SLURM_CPU_BIND&#39;: &#39;quiet,mask_cpu:0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004&#39;, &#39;SLURM_CPU_BIND_LIST&#39;: &#39;0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004&#39;, &#39;SLURM_CPU_BIND_TYPE&#39;: &#39;mask_cpu:&#39;, &#39;SLURM_CPU_BIND_VERBOSE&#39;: &#39;quiet&#39;, &#39;SLURM_LAUNCH_NODE_IPADDR&#39;: &#39;130.183.186.16&#39;}]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shell_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;JobID           JobName  Partition    Account  AllocCPUS      State ExitCode &#39;,
+ &#39;------------ ---------- ---------- ---------- ---------- ---------- -------- &#39;,
+ &#39;20332322     executorl+     s.cmmg        mpd          8    RUNNING      0:0 &#39;,
+ &#39;20332322.ba+      batch                   mpd          8    RUNNING      0:0 &#39;,
+ &#39;20332322.ex+     extern                   mpd          8    RUNNING      0:0 &#39;,
+ &#39;20332322.0       python                   mpd          1    RUNNING      0:0 &#39;,
+ &#39;20332322.1       python                   mpd          1    RUNNING      0:0 &#39;,
+ &#39;20332322.2       python                   mpd          1    RUNNING      0:0 &#39;,
+ &#39;20332322.3       python                   mpd          1    RUNNING      0:0 &#39;,
+ &#39;&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">sacct</span></code> output for the nested job shows the outer job allocation at the top followed by one <code class="docutils literal notranslate"><span class="pre">python</span></code> step per inner task (<code class="docutils literal notranslate"><span class="pre">20332322.0</span></code> through <code class="docutils literal notranslate"><span class="pre">20332322.3</span></code>). Each step uses <code class="docutils literal notranslate"><span class="pre">AllocCPUS=1</span></code>, confirming that the four tasks ran as separate <code class="docutils literal notranslate"><span class="pre">srun</span></code> steps within the same job rather than as independent <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> submissions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>function</th>
+      <th>input_args</th>
+      <th>input_kwargs</th>
+      <th>output</th>
+      <th>resource_dict</th>
+      <th>runtime</th>
+      <th>queue_id</th>
+      <th>error_log_file</th>
+      <th>filename</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;function get_slurm_env at 0x14d04fd31260&gt;</td>
+      <td>[]</td>
+      <td>{}</td>
+      <td>{'SLURM_MEM_PER_CPU': '1500', 'SLURM_NODEID': ...</td>
+      <td>{'submission_template': '#!/bin/bash
+#SBATCH -...</td>
+      <td>5.015562</td>
+      <td>20332320</td>
+      <td>None</td>
+      <td>/cmmc/u/janj/notebooks/2026/2026-06-03-prabhat...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;function get_slurm_parallel_env at 0x14d04fd3...</td>
+      <td>[]</td>
+      <td>{}</td>
+      <td>[[{'SLURM_MEM_PER_CPU': '1500', 'SLURM_NODEID'...</td>
+      <td>{'submission_template': '#!/bin/bash
+#SBATCH -...</td>
+      <td>0.011143</td>
+      <td>20332321</td>
+      <td>None</td>
+      <td>/cmmc/u/janj/notebooks/2026/2026-06-03-prabhat...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;function get_nested_env at 0x14d04fd311c0&gt;</td>
+      <td>[]</td>
+      <td>{}</td>
+      <td>NaN</td>
+      <td>{'submission_template': '#!/bin/bash
+#SBATCH -...</td>
+      <td>NaN</td>
+      <td>20332322</td>
+      <td>None</td>
+      <td>/cmmc/u/janj/notebooks/2026/2026-06-03-prabhat...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The cache DataFrame gives a complete audit trail: the function object, its arguments, the full <code class="docutils literal notranslate"><span class="pre">resource_dict</span></code> used for submission, the wall-clock <code class="docutils literal notranslate"><span class="pre">runtime</span></code>, the SLURM <code class="docutils literal notranslate"><span class="pre">queue_id</span></code>, and the path to the HDF5 file storing the serialised return value. The <code class="docutils literal notranslate"><span class="pre">output</span></code> column is <code class="docutils literal notranslate"><span class="pre">NaN</span></code> for the nested job while it is still running; once complete, it holds the deserialized Python return value.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">get_cache_data</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;get_nested_env&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])</span>
+        <span class="n">shell_output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;sacct&quot;</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;queue_id&#39;</span><span class="p">])],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20332322
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shell_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;JobID           JobName  Partition    Account  AllocCPUS      State ExitCode &#39;,
+ &#39;------------ ---------- ---------- ---------- ---------- ---------- -------- &#39;,
+ &#39;20332322     executorl+     s.cmmg        mpd          8  COMPLETED      0:0 &#39;,
+ &#39;20332322.ba+      batch                   mpd          8  COMPLETED      0:0 &#39;,
+ &#39;20332322.ex+     extern                   mpd          8  COMPLETED      0:0 &#39;,
+ &#39;20332322.0       python                   mpd          1  COMPLETED      0:0 &#39;,
+ &#39;20332322.1       python                   mpd          1  COMPLETED      0:0 &#39;,
+ &#39;20332322.2       python                   mpd          1  COMPLETED      0:0 &#39;,
+ &#39;20332322.3       python                   mpd          1  COMPLETED      0:0 &#39;,
+ &#39;&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cache_dir</span> <span class="o">=</span> <span class="s2">&quot;executorlib_cache&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;get_slurm_envccfcb90850bb2803c9b37c6ecde017ee&#39;,
+ &#39;get_nested_envfa45bec89a84ca0b105107cb298c9a0d_o.h5&#39;,
+ &#39;get_nested_envfa45bec89a84ca0b105107cb298c9a0d&#39;,
+ &#39;get_slurm_envccfcb90850bb2803c9b37c6ecde017ee_o.h5&#39;,
+ &#39;get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371&#39;,
+ &#39;get_slurm_parallel_env24890a8e967e7328abd85429d1ce0371_o.h5&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "janj"
+        },
+        kernelOptions: {
+            name: "janj",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'janj'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">executorlib with SLURM</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="slurm_error_v1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">executorlib with SLURM</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submit-python-function-to-slurm">Submit Python Function to SLURM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submit-mpi-parallel-python-function-to-slurm">Submit MPI parallel Python function to SLURM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-executors">Nested Executors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clean-up">Clean up</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
